@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>勻速運動</title>
+    <style>
+       .box{
+           width: 100px;
+           height: 100px;
+           background: lightblue;
+           position: absolute;
+           top: 0;
+           left: 1000px;
+       }
+       button{
+           margin-top: 110px;
+       }
+       span{
+           position: absolute;
+           width: 1px;
+           height: 100px;
+           background:black;
+           left: 600px;
+           top:0;
+       }
+       .box2{
+           width: 100px;
+           height: 100px;
+           background: rgb(231, 106, 221);
+           position: absolute;
+           top: 0;
+           left:0;
+       }
+    </style>
+</head>
+<body>
+    <div class="box"></div>
+    <div class="box2"></div>
+    <span></span>
+    <button>run</button>
+    <button>stop</button>
+    <script>
+        var div = document.getElementsByTagName('div')[0];
+        var btn = document.getElementsByTagName('button')[0];
+        var stop = document.getElementsByTagName('button')[1];
+        var box2 = document.getElementsByClassName('box2')[0];
+        var timer = null;//计时器声明放在全局位置方便随时停止
+        btn.onclick = function(){
+         startMove(box2,500);
+    }
+       btn.onclick = function(){
+         startMove(div,500);
+    }
+   
+    stop.onclick = function(){
+         clearInterval(timer);//清除定时器
+        //  timer = null;
+    }
+
+
+
+
+
+
+
+     ///封装匀速移动函数,第一个参数dom元素，第二个参数为元素距离文档左侧的距离
+    function startMove (dom,target){
+        var sum = target - dom.offsetLeft > 0 ? 5:-5;
+          clearInterval(timer);//点击事件时先清除这个定时器，再执行这个定时器，解决多次点击加速问题
+          timer =  setInterval(function(){
+              if(Math.abs(target - dom.offsetLeft) < Math.abs(sum)){//如果div离文档左侧的距离等于700
+                clearInterval(timer);//停止计时器
+                dom.style.left = '500px';//如果div移动超过左侧文档的距离500时，等于500
+              }
+              else{//否则就一直执行定时器
+                dom.style.left = dom.offsetLeft + sum +'px';
+              }
+             
+          },30);
+    }
+
+
+
+    </script>
+</body>
+</html>

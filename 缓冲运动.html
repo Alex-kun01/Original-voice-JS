@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>緩衝運動</title>
+    <style>
+       .box{
+           width: 100px;
+           height: 100px;
+           background: lightblue;
+           position: absolute;
+           top: 0;
+           left: 1000px;
+       }
+       button{
+           margin-top: 110px;
+       }
+    </style>
+</head>
+<body>
+    <div class="box" ></div>
+    <button>run</button>
+    <script>
+        
+        var div = document.getElementsByTagName('div')[0];
+        var btn = document.getElementsByTagName('button')[0];
+        var timer = null;//计时器声明放在全局位置方便随时停止
+
+        btn.onclick = function(){
+            bufferMove(div,200);
+    }
+
+       //物体的速度 距离目标点越近，就越小，当到达目标点时，速度减小为零
+       //dom 元素，target 目标点
+       function bufferMove(dom,target){
+           clearInterval(timer);//点击事件时先清除这个定时器，再执行这个定时器，解决多次点击加速问题
+           var ispeed = null;//记录运动的速度
+           timer = setInterval(function(){
+              ispeed = (target - dom.offsetLeft)/10;//目标点减去当前位置
+              ispeed = ispeed > 0 ? Math.ceil(ispeed) : Math.floor(ispeed);
+              if(dom.offsetLeft == target){//如果元素位置等于目标位置则停止计时器
+                  clearInterval(timer);
+              }
+              else{
+                dom.style.left = dom.offsetLeft + ispeed + "px";//否则执行移动代码
+              }
+
+           },30)
+
+       }
+    </script>
+</body>
+</html>

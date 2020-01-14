@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+     .box{
+         width: 800px;
+         height: 80px;
+         background: lightblue;
+         position: absolute;
+         top: 50%;
+         left: 50%;
+         margin-top: -40px;
+         margin-left: -400px;
+     }
+     .box1,.box2,.box3,.box4{
+         width: 200px;
+         height: 80px;
+         float: left;
+         border: 1px solid black;
+         box-sizing: border-box;
+         text-align: center;
+         line-height: 80px;
+     }
+     .box .move{
+        width: 200px;
+         height: 80px;
+         background: red;
+         opacity: 0.4;
+         position: absolute;
+         top: 0;
+         left: 0;
+         box-sizing: border-box;
+     }
+     
+    </style>
+</head>
+<body>
+    <div class="box">
+        <div class="box1">NOE</div>
+        <div class="box2">TWO</div>
+        <div class="box3">TREE</div>
+        <div class="box4">FORE</div>
+        <div class="move"></div>
+    </div>
+
+    <script>
+        var moveDiv = document.getElementsByClassName('move')[0];
+        var box1 = document.getElementsByClassName('box1')[0];
+        var box2 = document.getElementsByClassName('box2')[0];
+        var box3 = document.getElementsByClassName('box3')[0];
+        var box4 = document.getElementsByClassName('box4')[0];
+        var  moveDiv = document.getElementsByClassName('move')[0];
+        var timer = null;
+        box1.onmouseover = function (){
+          var divLeft = this.offsetLeft;//获取当前元素的offsetLeft值
+            elasticMove(moveDiv,divLeft);
+        }
+        box2.onmouseover = function (){
+            var divLeft = this.offsetLeft;//获取当前元素的offsetLeft值
+            elasticMove(moveDiv,divLeft);
+        }
+        box3.onmouseover = function (){
+            var divLeft = this.offsetLeft;//获取当前元素的offsetLeft值
+            elasticMove(moveDiv,divLeft);
+        }
+        box4.onmouseover = function (){
+            var divLeft = this.offsetLeft;//获取当前元素的offsetLeft值
+            elasticMove(moveDiv,divLeft);
+        }
+
+        function elasticMove(dom,target){
+              clearInterval(timer);
+              var a = 3;//加速度
+              var ispeed = 0;//速度
+              var u = 0.7;//摩檫力/损耗
+              timer = setInterval(function(){
+                  a = (target - dom.offsetLeft)/7;
+                  ispeed += a;
+                  ispeed *= u;
+                  //当速度小于1并且元素位置与目标位置的差小于1时
+                  if(Math.abs(ispeed) < 1 && Math.abs(target - dom.offsetLeft) < 1){
+                         clearInterval(timer);
+                         dom.style.left = target + 'px';
+                  }else{
+                    dom.style.left = dom.offsetLeft + ispeed + 'px';
+                  }
+              },30)
+        }
+      
+    </script>
+</body>
+</html>

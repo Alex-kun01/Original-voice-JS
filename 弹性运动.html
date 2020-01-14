@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+     div{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 100px;  
+      background: red
+     }
+     button{
+         margin-top: 150px;
+     }
+
+     span{
+         position: absolute;
+         top: 0;
+         left: 500px;
+         width: 1px;
+         height: 100px;
+         background: black;
+     }
+
+    </style>
+</head>
+<body>
+    <div></div>
+    <span></span>
+    <button>STOP</button>
+    <script>
+        //v = v + at;初速度 + 加速度
+        var div = document.getElementsByTagName('div')[0]
+        var btn = document.getElementsByTagName('button')[0];
+        var timer = null;
+        div.onclick = function (){
+            startMove(this,500);
+        }
+        // btn.onclick = function(){
+        //     clearInterval(timer);
+        // }
+
+        function startMove(dom,target){
+            clearInterval(timer)
+            var a = 3;//加速度
+            var ispeed = 0;//速度
+            var u = 0.8;//摩檫力
+            timer = setInterval(function(){
+               //传入目标位置减去元素当前位置 除以5，a的值在元素越靠近目标位置时越小
+               //当元素超过目标位置时a为负数，离目标位置越近就越大
+              a = (target - dom.offsetLeft)/5;
+              ispeed += a; 
+              ispeed *= 0.8;
+              //当加速度小于1并且元素到与标点位置的差值小于1的时候，定时器停止
+              if(Math.abs(ispeed) < 1 && Math.abs(target - dom.offsetLeft) < 1){
+                  clearInterval(timer);
+                  dom.style.left = target + 'px';
+              }else{
+                dom.style.left = dom.offsetLeft + ispeed + "px";
+              }
+                 
+            },30)
+        }
+
+    </script>
+</body>
+</html>

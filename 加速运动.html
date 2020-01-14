@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+     div{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100px;
+      height: 100px;  
+      background: red
+     }
+     button{
+         margin-top: 150px;
+     }
+
+     
+    </style>
+</head>
+<body>
+    <div></div>
+    <button>STOP</button>
+    <script>
+        //v = v + at;初速度 + 加速度
+        var div = document.getElementsByTagName('div')[0]
+        var btn = document.getElementsByTagName('button')[0];
+        var timer = null;
+        div.onclick = function (){
+            startMove();
+        }
+        btn.onclick = function(){
+            clearInterval(timer);
+        }
+
+        function startMove(dom){
+            clearInterval(timer);
+            var a = -1;//定义一个加速度
+            var ispeed = 90;//定义一个初速度
+            timer = setInterval(function(){
+                ispeed = ispeed + a;
+                div.style.left = div.offsetLeft + ispeed + "px";
+                
+            },30)
+
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /* .box{
+            width: 1400px;
+            height: 900px;
+            background: lightblue;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -450px;
+            margin-left: -700px;
+        } */
+        .moveboot{
+            width: 100px;
+            height: 100px;
+            background: orangered;
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+        <div class="moveboot"></div>
+    <script>
+            var moveboot = document.getElementsByClassName('moveboot')[0];
+            var timer = null;
+
+            moveboot.onclick = function (){
+                gravityMove(this);
+            }
+ 
+            function gravityMove(dom,target){
+                clearInterval(dom.timer);
+                 var ispeedX = 6;//向左的速度
+                 var ispeedY = 8;//向下的速度
+                 var g = 3;//重力
+                 var u = 0.9;//摩擦力
+                 dom.timer = setInterval(function(){
+                     ispeedY += g;//垂直的速度每次弹起加3，即：每次弹起距离顶端增加3的距离
+                      var newLeft = dom.offsetLeft + ispeedX;//元素当前位置加上向左的速度
+                      var newTop = dom.offsetTop + ispeedY;//元素当前位置加上向下的速度
+                      if(newTop >= document.documentElement.clientHeight - dom.offsetHeight){
+                          ispeedY *= -1;
+                          ispeedY *= u;//每次碰撞垂直方向的损耗
+                          ispeedX *= u;//每次碰撞左右方向的损耗
+                          newTop =  document.documentElement.clientHeight - dom.offsetHeight;
+                      }
+                      if(newTop < 0){
+                          ispeedY *= -1;
+                          ispeedY *= u;//每次碰撞垂直方向的损耗
+                          ispeedX *= u;//每次碰撞左右方向的损耗
+                          newTop = 0;
+                      }
+                      if(newLeft >= document.documentElement.clientWidth - dom.offsetWidth){
+                          ispeedX *= -1;
+                          ispeedY *= u;//每次碰撞垂直方向的损耗
+                          ispeedX *= u;//每次碰撞左右方向的损耗
+                          newLeft = document.documentElement.clientWidth - dom.offsetWidth;
+                      }
+                      if(newLeft < 0){
+                          ispeedX *= -1;
+                          ispeedY *= u;//每次碰撞垂直方向的损耗
+                          ispeedX *= u;//每次碰撞左右方向的损耗
+                          newLeft = 0;
+                      }
+                      //判断垂直，左右方向的力的绝对值是否小于1，如果小于1则让他们等于0
+                      if(Math.abs(ispeedX) < 1){
+                          ispeedX = 0;
+                      }
+                      if(Math.abs(ispeedY) < 3){
+                          ispeedY =0;
+                      }
+                      //当垂直，左右方向的力都为0 并且元素的到达边框最底部的时候停止计时器
+                      if(ispeedX == 0 && ispeedY == 0 && document.documentElement.clientHeight - dom.offsetHeight){
+                          clearInterval(dom.timer);
+                      }
+                      console.log(ispeedX,ispeedY);
+
+                      dom.style.left = newLeft + 'px';
+                      dom.style.top = newTop + 'px';
+                 },30)
+
+            }
+
+
+
+
+
+
+
+    </script>
+</body>
+</html>

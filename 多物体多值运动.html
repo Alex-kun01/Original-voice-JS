@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+      div{
+          position: absolute;
+          left: 0;
+          width: 100px;
+          height: 100px;
+          background: lightblue;
+          opacity: 1;
+      }
+      #topDiv{
+          top: 200px;
+      }
+      #bottomDiv{
+          top: 400px;
+      }
+    </style>
+</head>
+<body>
+    <div id="topDiv"></div>
+    <div id="bottomDiv"></div>
+    <script>
+        var topDiv = document.getElementById('topDiv');
+        var bottomDiv = document.getElementById('bottomDiv');
+        var timer = null;
+        //让topDiv宽度变为400，高度400，left > 200,top > 300,opacity > 50
+        topDiv.onclick = function (){
+            //执行这个函数
+            styleMOreMOve(this,{width:400,height:400,left:200,top:400,opacity:50},function(){
+                styleMOreMOve(bottomDiv,{width:400,height:400,left:200,top:0,opacity:30});
+            });
+            console.log("触发事件了");
+        }
+         
+        function styleMOreMOve(dom,attrobj,callback){
+            clearInterval(dom.timer);//首先清除重复定时器
+            var ispeed = null,iCur = null;
+            dom.timer = setInterval(function(){
+                var bstop = true;//设置一个值为true
+                //遍历这个对象attrobj
+                   for(var attr in attrobj){
+                       //判断传入阐述attr是否为opacity
+                       if(attr == "opacity"){
+                           iCur = parseFloat(getStyle(dom,attr))*100;
+                       }else{
+                           iCur = parseInt(getStyle(dom,attr));
+                       }
+                       ispeed = (attrobj[attr] - iCur)/7;
+                       ispeed = ispeed > 0 ? Math.ceil(ispeed) : Math.floor(ispeed);
+                       if(attr == "opacity"){
+                           dom.style.opacity = (iCur + ispeed)/100;
+                       }else{
+                           dom.style[attr] = iCur + ispeed + "px";
+                       }
+                       //只要有一个值不等于传入的值，那么bstop的值就会改变为false
+                       //如果所有值都等于了，则不会执行以下代码，则不改变bstop的值，它依然为true
+                       if(iCur != attrobj[attr]){
+                              bstop = false;
+                       }
+                   }//所有值都到达了目标值时，清除计时器
+                   if(bstop){
+                       clearInterval(dom.timer);
+                       callback();
+                   }
+            },30)
+        }
+
+
+
+
+
+
+
+
+
+
+
+        //获取目标元素样式
+        function getStyle(dom,target){
+            if(window.getComputedStyle){
+                return window.getComputedStyle(dom,null)[target];
+            }else{
+                return dom.currenStyle[target];
+            }
+        }
+    </script>
+</body>
+</html>

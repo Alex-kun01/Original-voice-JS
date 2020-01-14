@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            background:
+        }
+         .movediv{
+             width: 100px;
+             height: 100px;
+             background:violet;
+             border-radius: 50%;
+             position: absolute;
+             top: 0;
+             left: 0;
+         }
+    </style>
+</head>
+<body>
+    <div class="movediv"></div>
+    <script>
+        var movediv = document.getElementsByTagName('div')[0];
+        var timer = null;
+        divMove(movediv);   
+        //拖拽元素方法
+        function divMove(dom){
+            var lastX = 0;//纪录上一个点X的位置
+            var lastY = 0;//纪录下一个点Y的位置
+            var ispeedX = 0;//纪录松手时X方向的速度
+            var ispeedY = 0;//纪录松手时Y方向的速度
+            dom.onmousedown = function(e){
+                var event = event || e;
+                var disX = event.clientX - this.offsetLeft;
+                var disY = event.clientY - this.offsetTop;
+                document.onmousemove = function(e){
+                    var event = event || e;
+                    var newLeft = event.clientX - disX;
+                    var newTop = event.clientY - disY;
+                    ispeedX = newLeft - lastX;
+                    ispeedY = newTop - lastY;
+                    lastX = newLeft;
+                    lastY = newTop;
+
+                    dom.style.left = newLeft + 'px';
+                    dom.style.top = newTop + 'px';
+                }
+                document.onmouseup = function(){
+                    document.onmouseup = null;
+                    document.onmousemove = null;
+                    gravityMove(dom,ispeedX,ispeedY)
+                }
+            }
+        }
+
+         //模拟重力
+        function gravityMove(dom,ispeedX,ispeedY){
+                    clearInterval(dom.timer);
+                 var g = 3;//重力
+                 var u = 0.9;//摩擦力
+                 dom.timer = setInterval(function(){
+                     ispeedY += g;//垂直的速度每次弹起加3，即：每次弹起距离顶端增加3的距离
+                      var newLeft = dom.offsetLeft + ispeedX;//元素当前位置加上向左的速度
+                      var newTop = dom.offsetTop + ispeedY;//元素当前位置加上向下的速度
+                      if(newTop >= document.documentElement.clientHeight - dom.offsetHeight){
+                          ispeedY *= -1;
+                          ispeedY *= u;//每次碰撞垂直方向的损耗
+                          ispeedX *= u;//每次碰撞左右方向的损耗
+                          newTop =  document.documentElement.clientHeight - dom.offsetHeight;
+                      }
+                      if(newTop < 0){
+                          ispeedY *= -1;
+                          ispeedY *= u;//每次碰撞垂直方向的损耗
+                          ispeedX *= u;//每次碰撞左右方向的损耗
+                          newTop = 0;
+                      }
+                      if(newLeft >= document.documentElement.clientWidth - dom.offsetWidth){
+                          ispeedX *= -1;
+                          ispeedY *= u;//每次碰撞垂直方向的损耗
+                          ispeedX *= u;//每次碰撞左右方向的损耗
+                          newLeft = document.documentElement.clientWidth - dom.offsetWidth;
+                      }
+                      if(newLeft < 0){
+                          ispeedX *= -1;
+                          ispeedY *= u;//每次碰撞垂直方向的损耗
+                          ispeedX *= u;//每次碰撞左右方向的损耗
+                          newLeft = 0;
+                      }
+                      //判断垂直，左右方向的力的绝对值是否小于1，如果小于1则让他们等于0
+                      if(Math.abs(ispeedX) < 1){
+                          ispeedX = 0;
+                      }
+                      if(Math.abs(ispeedY) < 3){
+                          ispeedY =0;
+                      }
+                      //当垂直，左右方向的力都为0 并且元素的到达边框最底部的时候停止计时器
+                      if(ispeedX == 0 && ispeedY == 0 && document.documentElement.clientHeight - dom.offsetHeight){
+                          clearInterval(dom.timer);
+                      }
+                      console.log(ispeedX,ispeedY);
+
+                      dom.style.left = newLeft + 'px';
+                      dom.style.top = newTop + 'px';
+                 },30)
+
+            }
+    </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>彈出元素</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        .box{
+              width: 600px;
+              height: 50px;
+              background: #00d3c0;
+              position: absolute;
+              top: 200px;
+              left: -580px;
+        }
+        .box span{
+            width: 20px;
+            height: 50px;
+            background: gray;
+            position: absolute;
+            top: 0;
+            right: 0;
+
+        }
+    </style>
+    <script src="../../方法库/domFunWord.js"></script>
+</head>
+<body>
+    <div class="box">
+        <span></span>
+    </div>
+    <script>
+         function bufferMove (dom,target){
+             clearInterval(timer);//点击事件时先清除这个定时器，再执行这个定时器，解决多次点击加速问题
+             var ispeed = null;//记录运动的速度
+             timer = setInterval(function(){
+             ispeed = (target - dom.offsetLeft)/5;//目标点减去当前位置
+             ispeed = ispeed > 0 ? Math.ceil(ispeed) : Math.floor(ispeed);
+             if(dom.offsetLeft == target){//如果元素位置等于目标位置则停止计时器
+               clearInterval(timer);
+             }
+             else{
+             dom.style.left = dom.offsetLeft + ispeed + "px";//否则执行移动代码
+            }
+
+        },30)
+    }
+       var box = document.getElementsByTagName('div')[0];
+       var span = document.getElementsByTagName('span')[0];
+       var timer = null;
+       box.onmouseover = function(){
+        bufferMove(box,0);
+       }
+       box.onmouseout = function(){
+           bufferMove(box,-580);
+       }
+    </script>
+    
+    
+</body>
+</html>

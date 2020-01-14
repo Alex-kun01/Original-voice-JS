@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 100px;
+            height: 100px;
+            background: #00d30c;
+            margin-bottom: 100px;
+            border: 5px solid orange;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="box1"></div>
+    <div class="box2"></div>
+    <div class="box3"></div>
+    <div class="box4"></div>
+    <script>
+        var div = document.getElementsByTagName('div');
+        var timer = null;
+
+        div[0].onmouseenter = function (){
+             startMove(this,"width",500);
+             console.log("触发事件了");
+        }
+        div[1].onmouseenter = function (){
+             startMove(this,"borderWidth",20);
+             console.log("触发事件了");
+        }
+        div[2].onmouseenter = function (){
+             startMove(this,"height",200);
+             console.log("触发事件了");
+        }
+        div[3].onmouseenter = function (){
+             startMove(this,"opacity",50);
+             console.log("触发事件了");
+        }
+
+
+        function startMove(dom,attr,target){
+            clearInterval(dom.timer)//惯例首先上来清除计时器
+            var ispeed = null,iCur = null;
+            dom.timer = setInterval(function(){
+                if(attr == "opacity"){
+                    iCur = parseFloat(getStyle(dom,attr))*100;
+                }else{
+                    iCur = parseInt(getStyle(dom,attr));//获取目标样式初始值
+                }
+                ispeed = (target - iCur)/7;
+                ispeed = ispeed > 0 ? Math.ceil(ispeed) : Math.floor(ispeed);
+                if(iCur == target){
+                    clearInterval(dom.timer);
+                }else{
+                    if(attr == "opacity"){
+                    dom.style[attr] = (ispeed + target)/100;
+                }else{
+                    dom.style[attr] = ispeed + iCur + "px";
+                }
+                
+                }
+            },30)
+        }
+
+
+
+
+        //  for(var i = 0;i<div.length;i++){
+        //      div[i].onmouseenter = function(){
+        //          bufferMove(this,400);
+        //      }
+        //      div[i].onmouseleave = function(){
+        //          bufferMove(this,100);
+        //      }
+        //  }
+        // div.onclick = function (){
+        //     startMove(this,1);
+        // }
+
+    //     function bufferMove(dom,target){
+    //        clearInterval(timer);//点击事件时先清除这个定时器，再执行这个定时器，解决多次点击加速问题
+    //        var ispeed = null,//记录运动的速度
+    //        iCur = null;//纪录宽度
+    //        timer = setInterval(function(){
+    //            iCur = parseInt(getStyle(dom,"width")); //将div元素的宽度赋值给iCur
+    //           ispeed = (target - iCur)/10;//目标点减去当前位置
+    //           ispeed = ispeed > 0 ? Math.ceil(ispeed) : Math.floor(ispeed);
+    //           if(iCur == target){//如果元素位置等于目标位置则停止计时器
+    //               clearInterval(timer);
+    //           }
+    //           else{
+    //             dom.style.width = iCur + ispeed + "px";//否则执行移动代码
+    //           }
+
+    //        },30)
+
+    //    }
+
+
+
+       function getStyle (dom,attr){//獲取元素的樣式，兼容性方法封裝
+            if(window.getComputedStyle){//如果能夠識別該方法
+                return window.getComputedStyle(dom,null)[attr];//直接返回該方法的獲取的值
+            }else{
+                return dom.currentStyle[attr];//否則就通過IE的方法獲取值並返回
+            }
+        }
+
+
+
+
+
+    //     function startMove (dom,target){
+
+    //         function getStyle (dom,attr){//獲取元素的樣式，兼容性方法封裝
+    //         if(window.getComputedStyle){//如果能夠識別該方法
+    //             return window.getComputedStyle(dom,null)[attr];//直接返回該方法的獲取的值
+    //         }else{
+    //             return dom.currentStyle[attr];//否則就通過IE的方法獲取值並返回
+    //         }
+    //     }
+    //    clearInterval(timer);
+    //         var ispeed = null,iCur = null;//定義兩個參數
+    //         timer = setInterval(function(){
+    //             iCur = parseFloat(getStyle(dom,'opacity'))*100;//獲取目標元素的透明度數值並X100倍
+    //             ispeed = (target - iCur)/7;
+    //             ispeed = ispeed > 0 ? Math.ceil(ispeed) : Math.floor(ispeed);
+    //             if(iCur == target){
+    //                 clearInterval(timer);
+    //             }else{
+    //                 dom.style.opacity = (iCur + ispeed)/100;
+    //             }
+
+    //         },30)
+    //     }
+    </script>
+</body>
+</html>
